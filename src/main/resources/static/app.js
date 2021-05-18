@@ -8,9 +8,9 @@ fetch("https://devicewebapi.herokuapp.com/measurements")
         for(let row of data) {
 
             //Converts unixtimestamp to time
-            var unixTimestamp = row.ts;
+            var unixTimestamp = row.timeStamp;
             var date = new Date(unixTimestamp*1000);
 
             //Fills table on htmlpage
-            tabledata.innerHTML += `<tr><td>${row.deviceId}</td><td>${date}</td><td>${row.temp}</td><td>${row.hum}</td>`    }
+            tabledata.innerHTML += `<tr><td>${row.deviceId}</td><td>${date}</td><td>${row.temperature}</td><td>${row.humidity}</td>`    }
     })
