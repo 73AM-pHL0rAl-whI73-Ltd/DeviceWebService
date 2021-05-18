@@ -1,7 +1,7 @@
 let tabledata = document.getElementById('tabledata')
 
 //Gets data from database from API to print values
-fetch("Input API Connection here")
+fetch("https://devicewebapi.herokuapp.com/measurements")
     .then(res => res.json())
     .then(data => {
         console.log(data)
