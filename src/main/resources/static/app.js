@@ -1,6 +1,6 @@
 //creates websocket
 var ws;
-ws = new WebSocket('https://devicewebservice.herokuapp.com/');
+ws = new WebSocket('ws://devicewebservice.herokuapp.com/');
 
 let tabledata = document.getElementById('tabledata');
 
