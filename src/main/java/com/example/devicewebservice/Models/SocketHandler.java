@@ -1,6 +1,7 @@
 package com.example.devicewebservice.Models;
 
 import com.google.gson.Gson;
+import lombok.Cleanup;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -24,6 +25,16 @@ public class SocketHandler extends TextWebSocketHandler {
         for(WebSocketSession webSocketSession : sessions) {
             webSocketSession.sendMessage(new TextMessage(""));
         }
+    }
+
+    public void updateClients() {
+        sessions.forEach(session -> {
+            try {
+                session.sendMessage(new TextMessage(""));
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
     }
 
     @Override
