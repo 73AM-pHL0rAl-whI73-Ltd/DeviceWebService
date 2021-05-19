@@ -18,7 +18,10 @@ public class SocketHandler extends TextWebSocketHandler {
     public void updateClients() {
         for (WebSocketSession webSocketSession : sessions) {
             try {
-                webSocketSession.sendMessage(new TextMessage(""));
+                if (webSocketSession.isOpen()){
+                    webSocketSession.sendMessage(new TextMessage(""));
+                }
+
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
