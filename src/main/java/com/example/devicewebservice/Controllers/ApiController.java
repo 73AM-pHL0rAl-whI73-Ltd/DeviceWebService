@@ -12,10 +12,10 @@ public class ApiController {
 
     @Autowired
     private final SocketHandler socketHandler;
-
-    @PostMapping("update")
+    //Runs updateClients() when recieving POST request from API.
+    @PostMapping("/update")
     public void updateClients() {
-
+        System.out.println("postmapping");
         socketHandler.updateClients();
     }
 }

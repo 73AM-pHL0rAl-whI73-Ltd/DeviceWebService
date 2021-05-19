@@ -1,18 +1,19 @@
+//creates websocket
 var ws;
-ws = new WebSocket('ws://localhost:8080/test');
+ws = new WebSocket('https://devicewebservice.herokuapp.com/');
 
 let tabledata = document.getElementById('tabledata');
 
 
-
+//updates tables when new message is recieved.
 ws.onmessage = function (){
     updateTable();
 }
-
+//updates table when connected.
 ws.onopen = function (){
     updateTable();
 }
-
+//fetches data from API and puts in HTML table.
 function updateTable() {
     //Gets data from database from API to print values
     fetch("https://devicewebapi.herokuapp.com/measurements")
