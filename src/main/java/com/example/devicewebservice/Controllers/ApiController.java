@@ -15,7 +15,7 @@ public class ApiController {
     //Runs updateClients() when recieving POST request from API.
     @PostMapping("/update")
     public void updateClients() {
-        System.out.println("postmapping");
+        
         socketHandler.updateClients();
     }
 }
