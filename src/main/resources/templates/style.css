@@ -1,0 +1,14 @@
+body{
+    background-color: floralwhite;
+}
+
+.btn-outline-success {
+    color: floralwhite;
+    border-color: floralwhite;
+}
+
+.btn-outline-success:hover {
+    color: black;
+    background-color: floralwhite;
+    border-color: floralwhite;
+}
