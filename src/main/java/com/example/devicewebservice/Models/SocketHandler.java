@@ -1,37 +1,38 @@
 package com.example.devicewebservice.Models;
 
 
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 public class SocketHandler extends TextWebSocketHandler {
 
-    public static List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
-    //updates clients when message is recieved from API and sends message to app.js.
-    public void updateClients() {
-        for (WebSocketSession webSocketSession : sessions) {
-            try {
-                if (webSocketSession.isOpen()){
-                    webSocketSession.sendMessage(new TextMessage(""));
-                }
+    private static final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        }
+    //updates clients when message is recieved from API and sends message to app.js.
+    @SneakyThrows
+    public void updateClients() {
+        for(var session : sessions)
+            session.sendMessage(new TextMessage(""));
     }
-    //Adds session to list when connected.
-    @Override
+
+
+    @Override // removes session from list when connected
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        sessions.remove(session);
+        super.afterConnectionClosed(session, status);
+    }
+
+    @Override //Adds session to list when connected.
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
-
+        super.afterConnectionEstablished(session);
     }
-
 }
