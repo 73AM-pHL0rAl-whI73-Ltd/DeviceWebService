@@ -1,0 +1,42 @@
+body{
+    background-color: floralwhite;
+}
+
+.btn-outline-success {
+    color: floralwhite;
+    border-color: floralwhite;
+}
+
+.btn-outline-success:hover {
+    color: black;
+    background-color: floralwhite;
+    border-color: floralwhite;
+}
+
+.navbar-light .navbar-toggler {
+    color: black;
+    border-color: darkgray;
+}
+
+.navbar-toggler {
+    border: 3px solid transparent;
+}
+
+.btn-primary{
+    color: black;
+    margin-top: 25%;
+    background-color: yellowgreen;
+    border-color: white;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: gray;
+    border-color: white;
+}
+
+.con{
+    text-align: center;
+    display: block;
+    margin-top: 4%;
+}
