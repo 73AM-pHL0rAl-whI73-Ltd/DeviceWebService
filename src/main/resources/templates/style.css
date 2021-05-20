@@ -12,3 +12,12 @@ body{
     background-color: floralwhite;
     border-color: floralwhite;
 }
+
+.navbar-light .navbar-toggler {
+    color: black;
+    border-color: darkgray;
+}
+
+.navbar-toggler {
+    border: 3px solid transparent;
+}
