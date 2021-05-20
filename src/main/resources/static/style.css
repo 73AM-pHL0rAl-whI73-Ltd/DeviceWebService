@@ -21,3 +21,22 @@ body{
 .navbar-toggler {
     border: 3px solid transparent;
 }
+
+.btn-primary{
+    color: black;
+    margin-top: 25%;
+    background-color: yellowgreen;
+    border-color: white;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: gray;
+    border-color: white;
+}
+
+.con{
+    text-align: center;
+    display: block;
+    margin-top: 4%;
+}
