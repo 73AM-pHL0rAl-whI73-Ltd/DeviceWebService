@@ -35,19 +35,24 @@ function updateTable() {
 
     function searching(){
         var inSearch = document.getElementById('inputSearch').value;
-        //post??
-        fetch("https://devicewebapi.herokuapp.com/measurements")
+        var path = "https://devicewebapi.herokuapp.com/device/{" +inSearch+"}/";
+
+        post(path);
+
+        fetch(path)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
                 // clear previous table data
                 tabledata.innerHTML = "";
 
-                //Fungerar ej
-                if (row.deviceId = inSearch){
-                    tabledata.innerHTML += `<tr><td>${row.deviceId}</td><td>${date}</td><td>${row.temperature}</td><td>${row.humidity}</td>`;
-                }
-                else
+                tabledata.innerHTML += `<tr><td>${row.deviceId}</td><td>${date}</td><td>${row.temperature}</td><td>${row.humidity}</td>`;
             })
+    }
+
+    function post(path, method='post'){
+        search.method = method;
+        search.action = path;
+        search.submit();
     }
 }
