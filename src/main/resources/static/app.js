@@ -47,7 +47,6 @@ function updateTable() {
                 if (row.deviceId = inSearch){
                     tabledata.innerHTML += `<tr><td>${row.deviceId}</td><td>${date}</td><td>${row.temperature}</td><td>${row.humidity}</td>`;
                 }
-                else
             })
     }
 }
