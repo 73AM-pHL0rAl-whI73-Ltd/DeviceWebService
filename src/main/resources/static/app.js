@@ -3,7 +3,7 @@ var ws;
 ws = new WebSocket('wss://devicewebservice.herokuapp.com/');
 
 let tabledata = document.getElementById('tabledata');
-
+let search = document.getElementById('search');
 
 //updates tables when new message is recieved.
 ws.onmessage = function (){
