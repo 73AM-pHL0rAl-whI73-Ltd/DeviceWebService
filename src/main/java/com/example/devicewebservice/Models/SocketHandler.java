@@ -14,25 +14,40 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class SocketHandler extends TextWebSocketHandler {
 
-    private static final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+    private static final List<Session> sessions = new CopyOnWriteArrayList<>();
 
     //updates clients when message is recieved from API and sends message to app.js.
     @SneakyThrows
     public void updateClients() {
         for(var session : sessions)
-            session.sendMessage(new TextMessage(""));
+        {
+            session.getSession().sendMessage(new TextMessage(""));
+            System.out.println("message sent");
+        }
+
     }
 
 
     @Override // removes session from list when connected
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        sessions.remove(session);
+        for(var clientsession : sessions)
+            if(clientsession.getSession() == session)
+            {
+                sessions.remove(clientsession);
+                System.out.println("session removed");
+            }
+
+        //sessions.remove(session);
         super.afterConnectionClosed(session, status);
     }
 
     @Override //Adds session to list when connected.
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        sessions.add(session);
+        var clientsession = new Session();
+        clientsession.setSession(session);
+        sessions.add(clientsession);
+        System.out.println("session added");
+        //sessions.add(session);
         super.afterConnectionEstablished(session);
     }
 }
