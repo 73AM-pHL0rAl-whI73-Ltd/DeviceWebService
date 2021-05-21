@@ -1,14 +1,17 @@
 package com.example.devicewebservice.Models;
 
 
+import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
@@ -18,26 +21,47 @@ public class SocketHandler extends TextWebSocketHandler {
 
     //updates clients when message is recieved from API and sends message to app.js.
     @SneakyThrows
-    public void updateClients() {
+    public void updateClients(Device deviceinfo) {
         for(var session : sessions)
         {
-            session.getSession().sendMessage(new TextMessage(""));
-            System.out.println("message sent");
+            if(session.getDevice() == null)
+            {
+                session.getSession().sendMessage(new TextMessage(""));
+            } else if(session.getDevice() != null &
+                    session.getDevice().getDeviceAlias().equalsIgnoreCase(deviceinfo.getDeviceAlias())) {
+                session.getSession().sendMessage(new TextMessage(""));
+            }
         }
-
     }
 
+    @Override
+    public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        super.handleMessage(session, message);
+        // find session
+        var clientMaybe = sessions.
+                stream().
+                filter(clientsession -> clientsession.getSession() == session).
+                findFirst();
+        // get message
+        Map value = new Gson().fromJson(message.getPayload(), Map.class);
+
+        if(clientMaybe.isPresent()) {
+            // get client
+            var client = clientMaybe.get();
+
+            if(value.containsKey("deviceAlias")) // set client serverside deviceAlias
+                client.getDevice().setDeviceAlias((String)value.get("deviceAlias"));
+            else // remove device subscription
+                client.setDevice(null);
+        }
+    }
 
     @Override // removes session from list when connected
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         for(var clientsession : sessions)
             if(clientsession.getSession() == session)
-            {
                 sessions.remove(clientsession);
-                System.out.println("session removed");
-            }
 
-        //sessions.remove(session);
         super.afterConnectionClosed(session, status);
     }
 
@@ -45,9 +69,9 @@ public class SocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         var clientsession = new Session();
         clientsession.setSession(session);
+
         sessions.add(clientsession);
-        System.out.println("session added");
-        //sessions.add(session);
+
         super.afterConnectionEstablished(session);
     }
 }
