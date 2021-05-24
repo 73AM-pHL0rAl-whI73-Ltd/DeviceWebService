@@ -9,7 +9,8 @@ var alias = "";
 var path = ``;
 
 //updates tables when new message is recieved.
-ws.onmessage = function (){
+ws.onmessage = function (event){
+    console.log(event.data);
     updateTable();
 }
 //updates table when connected.

@@ -24,13 +24,15 @@ public class SocketHandler extends TextWebSocketHandler {
     public void updateClients(Device deviceinfo) {
         for(var session : sessions)
         {
+            var alias = session.getDevice().getDeviceAlias();
             if(session.getDevice() == null)
             {
-                session.getSession().sendMessage(new TextMessage(""));
+                session.getSession().sendMessage(new TextMessage(alias));
             } else if(session.getDevice() != null &
                     session.getDevice().getDeviceAlias().equalsIgnoreCase(deviceinfo.getDeviceAlias())) {
-                session.getSession().sendMessage(new TextMessage(""));
+                session.getSession().sendMessage(new TextMessage(alias));
             }
+            System.out.println("ws-update device alias : " + alias);
         }
     }
 
