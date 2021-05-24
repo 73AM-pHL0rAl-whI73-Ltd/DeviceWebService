@@ -35,7 +35,7 @@ function updateTable() {
 
     function searching(){
         var inSearch = document.getElementById('inputSearch').value;
-        var path = "https://devicewebapi.herokuapp.com/device/{" +inSearch+"}/";
+        var path = "https://devicewebapi.herokuapp.com/measurements/device/" +inSearch+"/";
 
         post(path);
 
