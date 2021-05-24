@@ -22,18 +22,13 @@ body{
     border: 1px solid transparent;
 }
 
-.btn-primary{
-    color: black;
-    margin-top: 25%;
+.btn-success {
+    color: #fff;
     background-color: yellowgreen;
-    border-color: white;
+    border-color: yellowgreen;
+    margin-top: 25%;
 }
 
-.btn-primary:hover {
-    color: #fff;
-    background-color: gray;
-    border-color: white;
-}
 
 .con{
     text-align: center;
