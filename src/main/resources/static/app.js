@@ -29,7 +29,7 @@ function updateTable() {
                 console.log(data);
                 createChart(data);
                 // clear previous table data
-                fillTable(data);
+                fetchDeviceAlias(data);
 
 
             })
@@ -40,24 +40,31 @@ function updateTable() {
                 console.log(data);
                 createChart(data);
                 // clear previous table data
-                fillTable(data);
-
-
+                fetchDeviceAlias(data);
             })
     }
 }
-function fillTable(data) {
 
+function fetchDeviceAlias(data) {
     tabledata.innerHTML = "";
-
     for (let row of data) {
+        fetch(`https://devicewebapi.herokuapp.com/devices/id/${row.deviceId}`)
+            .then(res => res.json())
+            .then(data => {
+                fillTable(row, data.deviceAlias);
+            })
+    }
+}
+
+function fillTable(data, deviceAlias) {
+
         //Converts unixtimestamp to time
-        var unixTimestamp = row.timeStamp;
-        var date = new Date(unixTimestamp * 1000);
+        var unixTimestamp = data.timeStamp;
+        var options = { year: 'numeric', month: 'long', day: 'numeric' , hour: 'numeric', minute: 'numeric', second: 'numeric'};
+        var date = new Date(unixTimestamp * 1000).toLocaleDateString("en-US", options);
 
         //Fills table on htmlpage
-        tabledata.innerHTML += `<tr><td>${row.deviceId}</td><td>${date}</td><td>${row.temperature}</td><td>${row.humidity}</td>`;
-    }
+        tabledata.innerHTML += `</tr><tr><td>${deviceAlias}</td><td>${data.deviceId}</td><td>${date}</td><td>${data.temperature}</td><td>${data.humidity}</td>`;
 }
 
     function searchByAlias(){
