@@ -24,12 +24,20 @@ function updateTable() {
             tabledata.innerHTML = "";
 
             for(let row of data) {
-                //Converts unixtimestamp to time
-                var unixTimestamp = row.timeStamp;
-                var date = new Date(unixTimestamp*1000);
+                fetch(`https://devicewebapi.herokuapp.com/devices/id/${row.deviceId}`, {
+                    method: 'get',
+                }).then(function(response) {
+                    return response.json();
+                }).then(function(data) {
+                    console.log(data.deviceAlias);
+                    //Converts unixtimestamp to time
+                    var unixTimestamp = row.timeStamp;
+                    var options = { year: 'numeric', month: 'long', day: 'numeric' , hour: 'numeric', minute: 'numeric', second: 'numeric'};
+                    var date = new Date(unixTimestamp * 1000).toLocaleDateString("en-US", options);
 
-                //Fills table on htmlpage
-                tabledata.innerHTML += `<tr><td>${row.deviceId}</td><td>${date}</td><td>${row.temperature}</td><td>${row.humidity}</td>`;
+                    //Fills table on htmlpage
+                    tabledata.innerHTML += `</tr><tr><td>${data.deviceAlias}</td><td>${row.deviceId}</td><td>${date}</td><td>${row.temperature}</td><td>${row.humidity}</td>`;
+                });
             }
         })
 
