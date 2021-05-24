@@ -51,12 +51,13 @@ function fetchDeviceAlias(data) {
         fetch(`https://devicewebapi.herokuapp.com/devices/id/${row.deviceId}`)
             .then(res => res.json())
             .then(data => {
-                fillTable(row, data.deviceAlias);
+                row['deviceAlias'] = data.deviceAlias;
+                fillTable(row);
             })
     }
 }
 
-function fillTable(data, deviceAlias) {
+function fillTable(data) {
 
         //Converts unixtimestamp to time
         var unixTimestamp = data.timeStamp;
@@ -64,7 +65,7 @@ function fillTable(data, deviceAlias) {
         var date = new Date(unixTimestamp * 1000).toLocaleDateString("en-US", options);
 
         //Fills table on htmlpage
-        tabledata.innerHTML += `</tr><tr><td>${deviceAlias}</td><td>${data.deviceId}</td><td>${date}</td><td>${data.temperature}</td><td>${data.humidity}</td>`;
+        tabledata.innerHTML += `</tr><tr><td>${data.deviceAlias}</td><td>${data.deviceId}</td><td>${date}</td><td>${data.temperature}</td><td>${data.humidity}</td>`;
 }
 
     function searchByAlias(){
