@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script src="https://kit.fontawesome.com/043e51ac62.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="./searchbyalias.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css">
 
@@ -22,7 +24,7 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="http://localhost:8080/">Mesurements</a>
+                    <a class="nav-link active" aria-current="page" href="http://localhost:8080/">Measurements</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link"  href="http://localhost:8080/register">Register device</a>
@@ -31,16 +33,19 @@
             </ul>
             <form class="d-flex">
                 <input class="form-control me-2" id="inputSearch" type="search" placeholder="Search Device" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit" onclick="searching()">Search</button>
+                <button class="btn btn-outline-success" type="button" onclick="searchByAlias()">Search</button>
             </form>
         </div>
     </div>
 </nav>
-
+<div class="container mt-5">
+    <canvas id="line-chart" width="800" height="450"></canvas>
+</div>
 <div class="container mt-5">
     <table class="table">
         <thead>
         <tr>
+            <th scope="col">DeviceAlias</th>
             <th scope="col">DeviceId</th>
             <th scope="col">Timestamp</th>
             <th scope="col">Temperature</th>
@@ -53,6 +58,7 @@
     </table>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<script src="./chart.js"></script>
 <script src="./app.js"></script>
 </body>
 </html>
