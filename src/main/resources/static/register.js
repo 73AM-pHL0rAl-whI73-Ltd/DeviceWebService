@@ -8,7 +8,8 @@ function generateCon(){
         .then(res => res.json())
         .then(data => {
                 // get device UUID
-                var id = data.deviceId;
+                let id = data.deviceId;
+
 
                 //print on htmlpage
                 con.innerHTML = id;
