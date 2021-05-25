@@ -52,12 +52,12 @@ async function displayTableWithDeviceAlias(data) {
 }
 //Fills row on htmlpage table
 function fillTableRow(data) {
-    measurements_table.innerHTML = `</tr><tr>
+    measurements_table.innerHTML += `</tr><tr>
                     <td>${data.deviceAlias}</td>
                     <td>${data.deviceId}</td>
                     <td>${convertTimeStampToString(data.timeStamp)}</td>
                     <td>${data.temperature}</td>
-                    <td>${data.humidity}</td>` + measurements_table.innerHTML;
+                    <td>${data.humidity}</td>`;
 }
 //Converts unixtimestamp to time
 function convertTimeStampToString(timeStamp) {
