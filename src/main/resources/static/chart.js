@@ -47,7 +47,7 @@ function getHumidities(data) {
 
     let humidities = [];
 
-    for(row of data) {
+    for(let row of data) {
         humidities.push(row.humidity);
     }
     return humidities;
