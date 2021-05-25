@@ -1,11 +1,8 @@
 //creates websocket
 let ws = new WebSocket('wss://devicewebservice.herokuapp.com/');
-
 let inputAlias = "";
 let path = ``;
-
-let tabledata = document.getElementById('tabledata');
-let search = document.getElementById('search');
+let measurements_table = document.getElementById('measurements_table');
 let searchbutton = document.getElementById("searchbutton");
 searchbutton.addEventListener('click',searchByAlias);
 
@@ -28,38 +25,34 @@ ws.onmessage = function (event){
 
 //fetches message data from api and triggers sequence for displaying data
 function updateTable() {
-
     // if not subscribed to a device
-    if(inputAlias === "") {
-        //Gets data from database from API to print values
-        fetch("https://devicewebapi.herokuapp.com/measurements/latest/50")
-            .then(res => res.json())
-            .then(data => {
-                createChart(data);
-                displayTableWithDeviceAlias(data);
-            })
-    } else { // use path to get messages from subscribed device
-        fetch(path)
-            .then(res => res.json())
-            .then(data => {
-                createChart(data);
-                displayTableWithDeviceAlias(data);
-            })
-    }
+    if(inputAlias === "")
+        fetchMeasurements("https://devicewebapi.herokuapp.com/measurements/latest/50");
+    else // use path to get messages from subscribed device
+        fetchMeasurements(path);
+}
+
+function fetchMeasurements(path){
+    fetch(path)
+        .then(res => res.json())
+        .then(data => {
+            createChart(data);
+            displayTableWithDeviceAlias(data);
+        })
 }
 
 async function displayTableWithDeviceAlias(data) {
-    tabledata.innerHTML = "";
+    measurements_table.innerHTML = "";
     for (let row of data) {
-        response = await fetch(`https://devicewebapi.herokuapp.com/devices/id/${row.deviceId}`);
-        jsonresponse = await response.json();
+        let response = await fetch(`https://devicewebapi.herokuapp.com/devices/id/${row.deviceId}`);
+        let jsonresponse = await response.json();
         row['deviceAlias'] = jsonresponse.deviceAlias;
         fillTableRow(row);
     }
 }
 //Fills row on htmlpage table
 function fillTableRow(data) {
-        tabledata.innerHTML += `</tr><tr>
+    measurements_table.innerHTML += `</tr><tr>
                     <td>${data.deviceAlias}</td>
                     <td>${data.deviceId}</td>
                     <td>${convertTimeStampToString(data.timeStamp)}</td>
