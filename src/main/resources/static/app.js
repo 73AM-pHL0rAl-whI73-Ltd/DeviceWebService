@@ -30,38 +30,35 @@ ws.onmessage = function (event){
 function updateTable() {
     // if not subscribed to a device
     if(inputAlias === "")
-        fetchMeasurements("https://devicewebapi.herokuapp.com/measurements/latest/50");
+        fetchMeasurementsAndUpdateTable("https://devicewebapi.herokuapp.com/measurements/latest/50");
     else // use path to get messages from subscribed device
-        fetchMeasurements(path);
+        fetchMeasurementsAndUpdateTable(path);
 }
 
-function fetchMeasurements(path){
+function fetchMeasurementsAndUpdateTable(path){
     fetch(path)
         .then(res => res.json())
-        .then(data => {
+        .then(async data => {
             createChart(data);
-            displayTableWithDeviceAlias(data);
+            measurements_table.innerHTML = "";
+            for (let row of data) {
+                let response = await fetch(`https://devicewebapi.herokuapp.com/devices/id/${row.deviceId}`);
+                let jsonresponse = await response.json();
+                row['deviceAlias'] = jsonresponse.deviceAlias;
+                fillTableRow(row);
+            }
         })
+        }
+//Fills row on htmlpage table
+function fillTableRow(row) {
+    measurements_table.innerHTML += `</tr><tr>
+                    <td>${row.deviceAlias}</td>
+                    <td>${row.deviceId}</td>
+                    <td>${convertTimeStampToString(row.timeStamp)}</td>
+                    <td>${row.temperature}</td>
+                    <td>${row.humidity}</td>`;
 }
 
-async function displayTableWithDeviceAlias(data) {
-    measurements_table.innerHTML = "";
-    for (let row of data) {
-        let response = await fetch(`https://devicewebapi.herokuapp.com/devices/id/${row.deviceId}`);
-        let jsonresponse = await response.json();
-        row['deviceAlias'] = jsonresponse.deviceAlias;
-        fillTableRow(row);
-    }
-}
-//Fills row on htmlpage table
-function fillTableRow(data) {
-    measurements_table.innerHTML += `</tr><tr>
-                    <td>${data.deviceAlias}</td>
-                    <td>${data.deviceId}</td>
-                    <td>${convertTimeStampToString(data.timeStamp)}</td>
-                    <td>${data.temperature}</td>
-                    <td>${data.humidity}</td>`;
-}
 //Converts unixtimestamp to time
 function convertTimeStampToString(timeStamp) {
     let unixTimestamp = timeStamp;

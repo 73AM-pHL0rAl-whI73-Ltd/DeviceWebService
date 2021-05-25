@@ -7,10 +7,5 @@ function searchByAlias(){
     sendToWebsocket(inSearch);
     inputAlias = inSearch;
 
-    fetch(path)
-        .then(res => res.json())
-        .then(data => {
-            createChart(data);
-            displayTableWithDeviceAlias(data);
-        })
+    fetchMeasurementsAndUpdateTable(path);
 }
