@@ -23,10 +23,10 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="https://devicewebapi.herokuapp.com/">Measurements</a>
+                    <a class="nav-link" href="https://devicewebservice.herokuapp.com/">Measurements</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="https://devicewebapi.herokuapp.com/register">Register device</a>
+                    <a class="nav-link active" aria-current="page" href="https://devicewebservice.herokuapp.com/register">Register device</a>
                 </li>
 
             </ul>
@@ -34,10 +34,11 @@
     </div>
 </nav>
 
-<p class="con">On this page you can generate your own connection-string in order to use your own device to collect data<br> to the
-mesurements page. Just Enter a device name and click generate then start collecting!</p>
+
 
 <div class="d-grid gap-2 col-6 mx-auto">
+    <p class="con">On this page you can generate your own connection-string in order to use your own device to collect data<br> to the
+        mesurements page. Just Enter a device name and click generate then start collecting!</p>
     <input type="text" id="deviceAlias" placeholder="Enter DeviceName">
     <button class="btn btn-success" type="button" onclick="generateCon()" id="generate">Generate</button>
 

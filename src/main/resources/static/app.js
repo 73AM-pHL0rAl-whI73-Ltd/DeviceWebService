@@ -2,110 +2,76 @@
 var ws;
 ws = new WebSocket('wss://devicewebservice.herokuapp.com/');
 
-let tabledata = document.getElementById('tabledata');
-let search = document.getElementById('search');
-
 var alias = "";
 var path = ``;
 
+let tabledata = document.getElementById('tabledata');
+let search = document.getElementById('search');
+let searchbutton = document.getElementById("searchbutton");
+searchbutton.addEventListener('click',searchByAlias);
+
+// updates table and charts when loading page
+updateTable();
+
+// send deviceAlias to webservice
+function send(deviceAlias) {
+    var json = JSON.stringify({
+        "deviceAlias":deviceAlias
+    });
+
+    ws.send(json);
+}
+
 //updates tables when new message is recieved.
 ws.onmessage = function (event){
-    console.log(event.data);
     updateTable();
 }
-//updates table when connected.
-ws.onopen = function (){
-    updateTable();
-}
-//fetches data from API and puts in HTML table.
+
+//fetches message data from api and triggers sequence for displaying data
 function updateTable() {
 
-    console.log(alias);
-
+    // if not subscribed to a device
     if(alias === "") {
         //Gets data from database from API to print values
         fetch("https://devicewebapi.herokuapp.com/measurements")
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 createChart(data);
-                // clear previous table data
-                fetchDeviceAlias(data);
+                displayTableWithDeviceAlias(data);
 
 
             })
-    } else {
+    } else { // use path to get messages from subscribed device
         fetch(path)
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 createChart(data);
-                // clear previous table data
-                fetchDeviceAlias(data);
+                displayTableWithDeviceAlias(data);
             })
     }
 }
 
-async function fetchDeviceAlias(data) {
+async function displayTableWithDeviceAlias(data) {
     tabledata.innerHTML = "";
     for (let row of data) {
         response = await fetch(`https://devicewebapi.herokuapp.com/devices/id/${row.deviceId}`);
         jsonresponse = await response.json();
         row['deviceAlias'] = jsonresponse.deviceAlias;
-        fillTable(row);
-        /*
-        fetch(`https://devicewebapi.herokuapp.com/devices/id/${row.deviceId}`)
-            .then(res => res.json())
-            .then(data => {
-                row['deviceAlias'] = data.deviceAlias;
-                fillTable(row);
-            })
-
-         */
+        fillTableRow(row);
     }
 }
-
-function fillTable(data) {
-
-        //Converts unixtimestamp to time
-        var unixTimestamp = data.timeStamp;
-        var options = { year: 'numeric', month: 'long', day: 'numeric' , hour: 'numeric', minute: 'numeric', second: 'numeric'};
-        var date = new Date(unixTimestamp * 1000).toLocaleDateString("en-US", options);
-
-        //Fills table on htmlpage
-
-        tabledata.innerHTML += `</tr><tr><td>${data.deviceAlias}</td><td>${data.deviceId}</td><td>${date}</td><td>${data.temperature}</td><td>${data.humidity}</td>`;
+//Fills row on htmlpage table
+function fillTableRow(data) {
+        tabledata.innerHTML += `</tr><tr>
+                    <td>${data.deviceAlias}</td>
+                    <td>${data.deviceId}</td>
+                    <td>${convertTimeStampToString(data.timeStamp)}</td>
+                    <td>${data.temperature}</td>
+                    <td>${data.humidity}</td>`;
 }
-
-    function searchByAlias(){
-        var inSearch = document.getElementById('inputSearch').value;
-        path = `https://devicewebapi.herokuapp.com/measurements/latest/alias/${inSearch}/100`;
-
-        // send alias to webservice
-        ws.send(inSearch);
-        alias = inSearch;
-        console.log(alias);
-
-        //post(path);
-
-        fetch(path)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data)
-                createChart(data);
-                fetchDeviceAlias(data);
-                //fillTable(data);
-                // clear previous table data
-                //tabledata.innerHTML = "";
-
-                //tabledata.innerHTML += `<tr><td>${row.deviceId}</td><td>${date}</td><td>${row.temperature}</td><td>${row.humidity}</td>`;
-            })
-        return false;
-    }
-
-    function post(path, method='post'){
-        search.method = method;
-        search.action = path;
-        search.submit();
-    }
-
+//Converts unixtimestamp to time
+function convertTimeStampToString(timeStamp) {
+    var unixTimestamp = timeStamp;
+    var options = { year: 'numeric', month: 'long', day: 'numeric' , hour: 'numeric', minute: 'numeric', second: 'numeric'};
+    return new Date(unixTimestamp * 1000).toLocaleDateString("en-US", options);
+}

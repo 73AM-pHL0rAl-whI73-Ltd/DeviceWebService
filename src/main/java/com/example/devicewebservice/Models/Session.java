@@ -7,8 +7,13 @@ import org.springframework.web.socket.WebSocketSession;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class Session {
     private Device device;
     private WebSocketSession session;
+
+    public Session(WebSocketSession session) {
+        this.session = session;
+        this.device = new Device();
+        this.device.setDeviceAlias("");
+    }
 }

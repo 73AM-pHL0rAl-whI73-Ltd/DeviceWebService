@@ -1,26 +1,8 @@
-/*
-    HTML ELEMENTS ---
-        header script - included chart.js(library) script
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-
-        bottom script - includes chart.js script(local file file)
-            <script src="./chart.js"></script>
-
- */
-
-
 
 // gets canvas element
 var ctx = document.getElementById('line-chart').getContext('2d');
-/*
-     needs to be inserted into index.html
 
-    <div class="container mt-5">
-        <canvas id="line-chart" width="800" height="450"></canvas>
-    </div>
- */
-
-// needs to be called when fetching new messages, updates chart
+// creates and updates canvas chart
 function createChart(data) {
 
     // gets data ranges from json array
@@ -57,7 +39,7 @@ function getTemperature(data) {
     for(row of data) {
         temperatures.push(row.temperature);
     }
-    console.log(temperatures);
+
     return temperatures;
 }
 function getHumidities(data) {
@@ -67,20 +49,21 @@ function getHumidities(data) {
     for(row of data) {
         humidities.push(row.humidity);
     }
-    console.log(humidities);
+
     return humidities;
 }
 function getDates(data) {
     dates = [];
 
     for(row of data) {
-        dates.push(toIso(row.timeStamp));
+        dates.push(convertTimeStampToString(row.timeStamp));
+        //dates.push(toUtc(row.timeStamp));
     }
-    console.log(dates);
+
     return dates;
 }
 // converts unix timestamp to utc
-function toIso(timestamp)
+function toUtc(timestamp)
 {
     var datetime = new Date(timestamp * 1000);
     return datetime.toUTCString();
