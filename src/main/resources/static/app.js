@@ -14,7 +14,7 @@ searchbutton.addEventListener('click',searchByAlias);
 updateTable();
 
 // send deviceAlias to webservice
-function send(deviceAlias) {
+function sendToWebsocket(deviceAlias) {
     var json = JSON.stringify({
         "deviceAlias":deviceAlias
     });
@@ -24,7 +24,7 @@ function send(deviceAlias) {
 
 //updates tables when new message is recieved.
 ws.onmessage = function (event){
-    alias = event.data;
+    inputAlias = event.data;
     updateTable();
 }
 
@@ -32,7 +32,7 @@ ws.onmessage = function (event){
 function updateTable() {
 
     // if not subscribed to a device
-    if(alias === "") {
+    if(inputAlias === "") {
         //Gets data from database from API to print values
         fetch("https://devicewebapi.herokuapp.com/measurements")
             .then(res => res.json())
