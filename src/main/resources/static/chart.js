@@ -1,17 +1,17 @@
 
 // gets canvas element
-var ctx = document.getElementById('line-chart').getContext('2d');
+let ctx = document.getElementById('line-chart').getContext('2d');
 
 // creates and updates canvas chart
 function createChart(data) {
 
     // gets data ranges from json array
-    datatemperatures = getTemperature(data);
-    datahumidities = getHumidities(data);
-    datadates = getDates(data);
+    let datatemperatures = getTemperature(data);
+    let datahumidities = getHumidities(data);
+    let datadates = getDates(data);
 
     // creates chart
-    var myChart = new Chart(ctx, {
+    new Chart(ctx, {
         type: 'line',
         data: {
             labels: datadates,
@@ -32,11 +32,12 @@ function createChart(data) {
         },
     });
 }
+
 function getTemperature(data) {
 
-    temperatures = [];
+    let temperatures = [];
 
-    for(row of data) {
+    for(let row of data) {
         temperatures.push(row.temperature);
     }
 
@@ -44,27 +45,19 @@ function getTemperature(data) {
 }
 function getHumidities(data) {
 
-    humidities = [];
+    let humidities = [];
 
     for(row of data) {
         humidities.push(row.humidity);
     }
-
     return humidities;
 }
 function getDates(data) {
-    dates = [];
+    let dates = [];
 
-    for(row of data) {
+    for(let row of data) {
         dates.push(convertTimeStampToString(row.timeStamp));
         //dates.push(toUtc(row.timeStamp));
     }
-
     return dates;
-}
-// converts unix timestamp to utc
-function toUtc(timestamp)
-{
-    var datetime = new Date(timestamp * 1000);
-    return datetime.toUTCString();
 }

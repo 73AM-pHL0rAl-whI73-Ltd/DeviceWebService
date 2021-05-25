@@ -1,9 +1,8 @@
 //creates websocket
-var ws;
-ws = new WebSocket('wss://devicewebservice.herokuapp.com/');
+let ws = new WebSocket('wss://devicewebservice.herokuapp.com/');
 
-var alias = "";
-var path = ``;
+let inputAlias = "";
+let path = ``;
 
 let tabledata = document.getElementById('tabledata');
 let search = document.getElementById('search');
@@ -15,10 +14,9 @@ updateTable();
 
 // send deviceAlias to webservice
 function sendToWebsocket(deviceAlias) {
-    var json = JSON.stringify({
+    let json = JSON.stringify({
         "deviceAlias":deviceAlias
     });
-
     ws.send(json);
 }
 
@@ -34,13 +32,11 @@ function updateTable() {
     // if not subscribed to a device
     if(inputAlias === "") {
         //Gets data from database from API to print values
-        fetch("https://devicewebapi.herokuapp.com/measurements")
+        fetch("https://devicewebapi.herokuapp.com/measurements/latest/50")
             .then(res => res.json())
             .then(data => {
                 createChart(data);
                 displayTableWithDeviceAlias(data);
-
-
             })
     } else { // use path to get messages from subscribed device
         fetch(path)
@@ -72,7 +68,7 @@ function fillTableRow(data) {
 }
 //Converts unixtimestamp to time
 function convertTimeStampToString(timeStamp) {
-    var unixTimestamp = timeStamp;
-    var options = { year: 'numeric', month: 'long', day: 'numeric' , hour: 'numeric', minute: 'numeric', second: 'numeric'};
-    return new Date(unixTimestamp * 1000).toLocaleDateString("en-US", options);
+    let unixTimestamp = timeStamp;
+    let options = { year: 'numeric', month: 'long', day: 'numeric' , hour: 'numeric', minute: 'numeric', second: 'numeric'};
+    return new Date(unixTimestamp * 1000).toLocaleDateString("sv-SE", options);
 }

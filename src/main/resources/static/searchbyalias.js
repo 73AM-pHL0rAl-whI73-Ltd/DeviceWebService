@@ -1,7 +1,7 @@
 
 
 function searchByAlias(){
-    var inSearch = document.getElementById('inputSearch').value;
+    let inSearch = document.getElementById('inputSearch').value;
     path = `https://devicewebapi.herokuapp.com/measurements/latest/alias/${inSearch}/100`;
 
     sendToWebsocket(inSearch);
