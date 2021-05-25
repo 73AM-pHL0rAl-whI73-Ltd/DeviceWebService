@@ -30,7 +30,7 @@ public class SocketHandler extends TextWebSocketHandler {
         {
             deviceAlias = session.getDevice().getDeviceAlias();
 
-            if(deviceAlias.equalsIgnoreCase(updateAlias)) {
+            if(deviceAlias.equalsIgnoreCase(updateAlias) | deviceAlias.isEmpty()) {
                 alias = session.getDevice().getDeviceAlias();
                 session.getSession().sendMessage(new TextMessage(alias));
             }
