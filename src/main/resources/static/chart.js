@@ -12,15 +12,15 @@ function createChart(data) {
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: tableData[2],
+            labels: tableData.dates,
             datasets: [{
-                data: tableData[0],
+                data: tableData.temperature,
                 label: "Temperature",
                 borderColor: "#d79763",
                 backgroundColor: "#e3944d",
                 fill: false,
             }, {
-                data: tableData[1],
+                data: tableData.humidity,
                 label: "Humidity",
                 borderColor: "#5cb2e7",
                 backgroundColor: "#228ae3",
@@ -32,14 +32,12 @@ function createChart(data) {
 }
 
 function mapData(data) {
-    let temperature = [];
-    let humidity = [];
-    let dates = [];
+    let tableData = {temperature:[],humidity:[],dates:[]};
 
     for(let row of data) {
-        temperature.push(row.temperature);
-        humidity.push(row.humidity);
-        dates.push(convertTimeStampToString(row.timeStamp));
+        tableData.temperature.push(row.temperature);
+        tableData.humidity.push(row.humidity);
+        tableData.dates.push(convertTimeStampToString(row.timeStamp));
     }
-    return [temperature,humidity,dates];
+    return tableData;
 }
