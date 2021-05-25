@@ -1,12 +1,13 @@
-package com.example.devicewebservice.Models;
+package com.example.devicewebservice.Service;
 
 
+import com.example.devicewebservice.Models.Device;
+import com.example.devicewebservice.Models.Session;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
-public class SocketHandler extends TextWebSocketHandler {
+public class SocketService extends TextWebSocketHandler {
 
     private static final List<Session> sessions = new CopyOnWriteArrayList<>();
 
@@ -42,7 +43,7 @@ public class SocketHandler extends TextWebSocketHandler {
         // find session
         var clientMaybe = sessions.
                 stream().
-                filter(clientsession -> clientsession.getSession() == session).
+                filter(clientSession -> clientSession.getSession() == session).
                 findFirst();
 
         if(clientMaybe.isPresent())
