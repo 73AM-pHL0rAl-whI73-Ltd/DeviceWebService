@@ -14,7 +14,10 @@ function sendToWebsocket(deviceAlias) {
     let json = JSON.stringify({
         "deviceAlias":deviceAlias
     });
-    ws.send(json);
+
+    if(ws.readyState !== ws.OPEN)
+        ws.OPEN;
+    ws.send(json)
 }
 
 //updates tables when new message is recieved.
