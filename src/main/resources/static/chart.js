@@ -33,8 +33,8 @@ function createChart(data) {
 
 function mapData(data) {
     let tableData = {temperature:[],humidity:[],dates:[]};
-
-    for(let row of data) {
+    const reversedData = data.slice().reverse();
+    for(let row of reversedData) {
         tableData.temperature.push(row.temperature);
         tableData.humidity.push(row.humidity);
         tableData.dates.push(convertTimeStampToString(row.timeStamp));
