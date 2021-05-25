@@ -24,6 +24,7 @@ function send(deviceAlias) {
 
 //updates tables when new message is recieved.
 ws.onmessage = function (event){
+    alias = event.data;
     updateTable();
 }
 
