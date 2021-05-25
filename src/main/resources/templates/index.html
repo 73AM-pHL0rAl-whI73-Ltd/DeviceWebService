@@ -31,8 +31,8 @@
                 </li>
 
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-2" id="inputSearch" type="search" placeholder="Search Device" aria-label="Search">
+            <form class="d-flex" id="search-form" onkeydown="return event.key !== 'Enter';">
+                <input class="form-control me-2" id="inputSearch" type="text" placeholder="Search Device" aria-label="textbox">
                 <button class="btn btn-outline-success" type="button" id="searchbutton">Search</button>
             </form>
         </div>

@@ -2,8 +2,16 @@
 let ws = new WebSocket('wss://devicewebservice.herokuapp.com/');
 let inputAlias = "";
 let path = ``;
+let searchinputfield = document.getElementById('inputSearch');
 let measurements_table = document.getElementById('measurements_table');
 let searchbutton = document.getElementById("searchbutton");
+
+searchinputfield.addEventListener('keyup', function(event) {
+    if (event.code == 'Enter') {
+        searchByAlias();
+    }
+});
+
 searchbutton.addEventListener('click',searchByAlias);
 
 // updates table and charts when loading page
