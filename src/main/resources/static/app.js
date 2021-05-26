@@ -1,35 +1,75 @@
 //creates websocket
-var ws;
-ws = new WebSocket('wss://devicewebservice.herokuapp.com/');
+let ws = new WebSocket('wss://devicewebservice.herokuapp.com/');
+let inputAlias = "";
+let path = ``;
+let searchinputfield = document.getElementById('inputSearch');
+let measurements_table = document.getElementById('measurements_table');
+let searchbutton = document.getElementById("searchbutton");
 
-let tabledata = document.getElementById('tabledata');
+searchinputfield.addEventListener('keyup', function(event) {
+    if (event.code == 'Enter') {
+        searchByAlias();
+    }
+});
 
+searchbutton.addEventListener('click',searchByAlias);
+
+// updates table and charts when loading page
+updateTable();
+
+// send deviceAlias to webservice
+function sendToWebsocket(deviceAlias) {
+    let json = JSON.stringify({
+        "deviceAlias":deviceAlias
+    });
+
+    if(ws.readyState !== ws.OPEN)
+        ws.OPEN;
+    ws.send(json)
+}
 
 //updates tables when new message is recieved.
-ws.onmessage = function (){
+ws.onmessage = function (event){
+    inputAlias = event.data;
     updateTable();
 }
-//updates table when connected.
-ws.onopen = function (){
-    updateTable();
-}
-//fetches data from API and puts in HTML table.
+
+//fetches message data from api and triggers sequence for displaying data
 function updateTable() {
-    //Gets data from database from API to print values
-    fetch("https://devicewebapi.herokuapp.com/measurements")
+    // if not subscribed to a device
+    if(inputAlias === "")
+        fetchMeasurementsAndUpdateTable("https://devicewebapi.herokuapp.com/measurements/latest/50");
+    else // use path to get messages from subscribed device
+        fetchMeasurementsAndUpdateTable(path);
+}
+
+function fetchMeasurementsAndUpdateTable(path){
+    fetch(path)
         .then(res => res.json())
-        .then(data => {
-            console.log(data)
-            // clear previous table data
-            tabledata.innerHTML = "";
-
-            for(let row of data) {
-                //Converts unixtimestamp to time
-                var unixTimestamp = row.timeStamp;
-                var date = new Date(unixTimestamp*1000);
-
-                //Fills table on htmlpage
-                tabledata.innerHTML += `<tr><td>${row.deviceId}</td><td>${date}</td><td>${row.temperature}</td><td>${row.humidity}</td>`;
+        .then(async data => {
+            createChart(data);
+            measurements_table.innerHTML = "";
+            for (let row of data) {
+                let response = await fetch(`https://devicewebapi.herokuapp.com/devices/id/${row.deviceId}`);
+                let jsonresponse = await response.json();
+                row['deviceAlias'] = jsonresponse.deviceAlias;
+                fillTableRow(row);
             }
         })
+        }
+//Fills row on htmlpage table
+function fillTableRow(row) {
+    measurements_table.innerHTML += `</tr><tr>
+                    <td>${row.deviceAlias}</td>
+                    <td>${row.deviceId}</td>
+                    <td>${convertTimeStampToString(row.timeStamp)}</td>
+                    <td>${row.temperature}</td>
+                    <td>${row.humidity}</td>`;
+}
+
+//Converts unixtimestamp to time
+function convertTimeStampToString(timeStamp) {
+    let unixTimestamp = timeStamp;
+    let options = { year: 'numeric', month: 'long', day: 'numeric' , hour: 'numeric', minute: 'numeric', second: 'numeric'};
+    return new Date(unixTimestamp * 1000).toLocaleDateString("sv-SE", options);
 }
